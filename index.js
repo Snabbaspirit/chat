@@ -9,6 +9,19 @@ app.get('/', (req, res) => {
 })
 app.use(express.static(__dirname + '/assets'))
 
+
+io.on('connection', (socket) => {
+
+  // data - emitting value from client (main.js 15)
+  socket.on('chat message', (data) => {
+    // emit data to client again
+    io.emit('chat message', {
+      message: data.message,
+      name: data.name,
+    })
+  })
+})
+
 http.listen(3001, () => {
   console.log('server started')
 })
